@@ -8,31 +8,33 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Instalar Dependências (npm)
+        run: |
+          npm install --force
+          # Garante que o Capacitor atualize a pasta Android
+          npx cap sync
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Limpar e Configurar Gradle
+      - name: Gerar APK Real
         run: |
-          # Procura a pasta que tem o arquivo build.gradle
-          export PROJECT_DIR=$(find . -name build.gradle -not -path "*/node_modules/*" | head -n 1 | xargs dirname)
-          echo "Projeto encontrado em: $PROJECT_DIR"
-          cd "$PROJECT_DIR"
-          # Instala um wrapper novo para não depender do que está quebrado
-          gradle wrapper
+          # Entra na pasta do Android e liga o motor
+          cd android
           chmod +x gradlew
-
-      - name: Gerar APK
-        run: |
-          export PROJECT_DIR=$(find . -name build.gradle -not -path "*/node_modules/*" | head -n 1 | xargs dirname)
-          cd "$PROJECT_DIR"
-          ./gradlew assembleRelease --stacktrace
+          ./gradlew assembleRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: Drivers-Friend-APK
-          path: "**/build/outputs/apk/release/*.apk"
+          path: "android/app/build/outputs/apk/release/*.apk"
           

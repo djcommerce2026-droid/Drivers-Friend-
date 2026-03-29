@@ -1,0 +1,29 @@
+{
+  "name": "Driver's Friend",
+  "description": "Uma aplicação abrangente de gestão financeira para motoristas de aplicativo (Uber, 99) para rastrear corridas, combustível, manutenção e custos fixos com insights de IA.",
+  "requestFramePermissions": [
+    "camera",
+    "geolocation",
+    "microphone",
+    "screen-wake-lock",
+    "background-location"
+  ],
+  "androidPermissions": [
+    "android.permission.INTERNET",
+    "android.permission.ACCESS_NETWORK_STATE",
+    "android.permission.ACCESS_FINE_LOCATION",
+    "android.permission.ACCESS_COARSE_LOCATION",
+    "android.permission.ACCESS_BACKGROUND_LOCATION",
+    "android.permission.FOREGROUND_SERVICE",
+    "android.permission.FOREGROUND_SERVICE_LOCATION",
+    "android.permission.FOREGROUND_SERVICE_SPECIAL_USE",
+    "android.permission.FOREGROUND_SERVICE_DATA_SYNC",
+    "android.permission.SYSTEM_ALERT_WINDOW",
+    "android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS",
+    "android.permission.POST_NOTIFICATIONS",
+    "android.permission.WAKE_LOCK",
+    "android.permission.VIBRATE",
+    "android.permission.RECEIVE_BOOT_COMPLETED",
+    "android.permission.SCHEDULE_EXACT_ALARM"
+  ]
+}

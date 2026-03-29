@@ -12,13 +12,16 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Build with Gradle
+      - name: Encontrar e Buildar
         run: |
-          cd android
+          # Procura onde está o arquivo gradlew e entra na pasta dele
+          GRADLEW_PATH=$(find . -name gradlew)
+          GRADLE_DIR=$(dirname $GRADLEW_PATH)
+          cd $GRADLE_DIR
           chmod +x gradlew
           ./gradlew assembleRelease
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: android/app/build/outputs/apk/release/app-release-unsigned.apk
+          path: "**/app-release-unsigned.apk"

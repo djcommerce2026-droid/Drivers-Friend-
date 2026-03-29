@@ -5,6 +5,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
       - name: set up JDK 17
@@ -14,14 +16,16 @@ jobs:
           distribution: 'temurin'
       - name: Encontrar e Buildar
         run: |
-          # Procura onde está o arquivo gradlew e entra na pasta dele
-          GRADLEW_PATH=$(find . -name gradlew)
-          GRADLE_DIR=$(dirname $GRADLEW_PATH)
-          cd $GRADLE_DIR
+          # Pega apenas o primeiro gradlew que encontrar, ignorando pastas de SDK
+          GRADLEW_PATH=$(find . -name gradlew | grep -v "android-sdk" | head -n 1)
+          GRADLE_DIR=$(dirname "$GRADLEW_PATH")
+          echo "Entrando na pasta: $GRADLE_DIR"
+          cd "$GRADLE_DIR"
           chmod +x gradlew
           ./gradlew assembleRelease
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
-          path: "**/app-release-unsigned.apk"
+          path: "**/build/outputs/apk/release/*.apk"
+

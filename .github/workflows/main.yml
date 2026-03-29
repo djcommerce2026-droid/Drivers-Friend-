@@ -18,19 +18,20 @@ jobs:
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          cache-disabled: true
 
       - name: Encontrar e Buildar
         run: |
-          # Encontra a pasta onde está o projeto Android
-          GRADLE_DIR=$(find . -name build.gradle -not -path "*/android-sdk/*" | head -n 1 | xargs dirname)
-          echo "Entrando na pasta: $GRADLE_DIR"
+          # Procura a pasta que contém o arquivo build.gradle do Android
+          GRADLE_DIR=$(find . -name build.gradle -not -path "*/node_modules/*" -not -path "*/android-sdk/*" | head -n 1 | xargs dirname)
+          echo "Pasta encontrada: $GRADLE_DIR"
           cd "$GRADLE_DIR"
-          # Usa o Gradle instalado pelo GitHub em vez do arquivo que deu erro
-          gradle assembleRelease
+          # Comando bruto para forçar o build
+          gradle assembleRelease --stacktrace
           
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
           name: app-release
           path: "**/build/outputs/apk/release/*.apk"
-          

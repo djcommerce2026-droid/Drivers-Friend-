@@ -5,6 +5,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       - uses: actions/checkout@v4
 
@@ -13,10 +15,11 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Instalar Dependências (npm)
+      - name: Instalar Dependências e Sincronizar
         run: |
+          # Entra na pasta onde o package.json realmente está
+          cd drivers_final
           npm install --force
-          # Garante que o Capacitor atualize a pasta Android
           npx cap sync
 
       - name: Set up JDK 17
@@ -27,8 +30,8 @@ jobs:
 
       - name: Gerar APK Real
         run: |
-          # Entra na pasta do Android e liga o motor
-          cd android
+          # Entra na pasta android que está dentro de drivers_final
+          cd drivers_final/android
           chmod +x gradlew
           ./gradlew assembleRelease
 
@@ -36,5 +39,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: Drivers-Friend-APK
-          path: "android/app/build/outputs/apk/release/*.apk"
+          path: "**/build/outputs/apk/release/*.apk"
           
